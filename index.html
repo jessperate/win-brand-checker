@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Win - AirOps Brand Guardian</title>
+  <style>
+    /* ── Fonts ─────────────────────────────────────────────────── */
+    @font-face { font-family: 'Saans'; src: url('Saans-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Saans'; src: url('Saans-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Saans'; src: url('Saans-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; }
+    @font-face { font-family: 'Saans Mono'; src: url('SaansMono-Medium.woff2') format('woff2'); font-weight: 500; font-style: normal; }
+    @font-face { font-family: 'Serrif VF'; src: url('SerrifVF.ttf') format('truetype'); font-weight: 400; font-style: normal; }
+
+    /* ── Brand tokens ───────────────────────────────────────────── */
+    :root {
+      --forest:       #002910;
+      --near-black:   #000d05;
+      --mid-green:    #008c44;
+      --interaction:  #00ff64;
+      --super-light:  #CCFFE0;
+      --green-100:    #dfeae3;
+      --off-white:    #F8FFFA;
+      --white:        #ffffff;
+      --label-yellow: #EEFF8C;
+      --stroke:       #d4e8da;
+      --text-primary:   #09090b;
+      --text-secondary: #676c79;
+      --text-tertiary:  #a5aab6;
+      --serif: 'Serrif VF', Georgia, serif;
+      --sans:  'Saans', 'Helvetica Neue', sans-serif;
+      --mono:  'Saans Mono', 'DM Mono', monospace;
+    }
+
+    /* ── Reset ──────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      font-size: 16px;
+      color: var(--text-primary);
+      background: var(--off-white);
+      line-height: 1.4;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+    /* ── Header ─────────────────────────────────────────────────── */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(0, 41, 16, 0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0, 255, 100, 0.1);
+    }
+    .site-header nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 32px; max-width: 1100px; margin: 0 auto;
+    }
+    .logo {
+      font-family: var(--mono); font-size: 13px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--interaction); text-decoration: none; display: flex;
+      align-items: center; gap: 10px;
+    }
+    .logo-dot {
+      width: 8px; height: 8px; background: var(--interaction);
+      border-radius: 50%; display: inline-block;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+    .settings-btn {
+      font-family: var(--mono); font-size: 12px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: rgba(204,255,224,0.7); background: none;
+      border: 1px solid rgba(204,255,224,0.15); padding: 8px 14px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .settings-btn:hover { background: rgba(0,255,100,0.06); border-color: rgba(204,255,224,0.3); color: var(--super-light); }
+
+    /* ── Hero ───────────────────────────────────────────────────── */
+    .hero {
+      background: var(--forest); padding: 130px 0 100px;
+      overflow: hidden; position: relative;
+    }
+    .hero::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse 55% 60% at 70% 50%, rgba(0,255,100,0.05) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      display: flex; align-items: center; gap: 60px;
+      position: relative; z-index: 1;
+    }
+    .hero-text { flex: 1; min-width: 0; }
+    .eyebrow {
+      font-family: var(--mono); font-size: 14px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: #057a28; display: inline-block;
+    }
+    .hero-eyebrow {
+      background: rgba(0,255,100,0.08); border: 1px solid rgba(0,255,100,0.18);
+      color: var(--interaction); padding: 6px 14px; margin-bottom: 28px;
+    }
+    .hero-title {
+      font-size: 80px; line-height: 1.0; letter-spacing: -0.02em;
+      color: var(--off-white); margin-bottom: 8px;
+    }
+    .hero-title .serif { font-family: var(--serif); display: block; }
+    .hero-title .sans  { font-family: var(--sans); font-weight: 400; display: block; color: rgba(248,255,250,0.6); }
+    .hero-subtitle {
+      font-size: 20px; line-height: 1.5; letter-spacing: -0.01em;
+      color: rgba(248,255,250,0.65); margin-bottom: 40px; max-width: 440px;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--interaction); color: var(--forest);
+      border-radius: 58px; padding: 16px 28px;
+      font-size: 18px; font-family: var(--sans); font-weight: 500;
+      border: none; cursor: pointer; text-decoration: none; transition: background 0.2s;
+    }
+    .btn-primary:hover { background: #00cc50; }
+    .hero-owl-wrap {
+      flex-shrink: 0; width: 300px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #win-hero {
+      width: 260px; display: block;
+      filter: drop-shadow(0 0 48px rgba(0,255,100,0.12));
+      animation: winBob 3.2s ease-in-out infinite;
+    }
+    @keyframes winBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+    /* ── Brand Check ─────────────────────────────────────────────── */
+    .brand-check {
+      padding: 100px 0; background: var(--white);
+      background-image: radial-gradient(var(--stroke) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-header .eyebrow { display: block; margin-bottom: 16px; }
+    .h2-split { font-size: 64px; line-height: 1.0; letter-spacing: -0.03em; }
+    .h2-split .serif { font-family: var(--serif); display: block; }
+    .h2-split .sans  { font-family: var(--sans); font-weight: 400; display: block; color: var(--text-secondary); }
+
+    .input-panel {
+      background: var(--white); border: 1px solid var(--stroke);
+      max-width: 780px; margin: 0 auto;
+    }
+    .input-tabs { display: flex; border-bottom: 1px solid var(--stroke); }
+    .tab-btn {
+      flex: 1; padding: 16px 24px; font-family: var(--mono);
+      font-size: 12px; font-weight: 500; text-transform: uppercase;
+      letter-spacing: 0.06em; background: none; border: none;
+      cursor: pointer; color: var(--text-secondary);
+      border-right: 1px solid var(--stroke); transition: all 0.2s;
+    }
+    .tab-btn:last-child { border-right: none; }
+    .tab-btn.active { background: var(--forest); color: var(--interaction); }
+    .tab-pane { display: none; padding: 32px; }
+    .tab-pane.active { display: block; }
+
+    .brand-textarea {
+      width: 100%; min-height: 200px; padding: 20px;
+      font-family: var(--sans); font-size: 16px; line-height: 1.6;
+      color: var(--text-primary); background: var(--off-white);
+      border: 1px solid var(--stroke); outline: none; resize: vertical;
+      transition: border-color 0.2s;
+    }
+    .brand-textarea:focus { border-color: var(--mid-green); }
+    .brand-textarea::placeholder { color: var(--text-tertiary); font-style: italic; }
+
+    .input-actions {
+      display: flex; align-items: center;
+      justify-content: space-between; margin-top: 20px;
+    }
+    .char-count {
+      font-family: var(--mono); font-size: 12px; color: var(--text-tertiary);
+    }
+    .api-mode-badge {
+      font-family: var(--mono); font-size: 11px; text-transform: uppercase;
+      letter-spacing: 0.06em; padding: 4px 10px; border: 1px solid var(--stroke);
+      color: var(--text-tertiary); cursor: pointer; transition: all 0.15s;
+    }
+    .api-mode-badge.live {
+      border-color: rgba(0,255,100,0.3); color: var(--mid-green);
+      background: rgba(0,255,100,0.04);
+    }
+
+    .dropzone {
+      min-height: 200px; border: 2px dashed var(--stroke);
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 12px; cursor: pointer;
+      transition: all 0.2s; background: var(--off-white); position: relative;
+    }
+    .dropzone:hover, .dropzone.drag-over {
+      border-color: var(--mid-green); background: var(--green-100);
+    }
+    .dropzone svg { color: var(--text-tertiary); }
+    .dropzone-label {
+      font-family: var(--mono); font-size: 13px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary);
+    }
+    .dropzone-sublabel { font-size: 13px; color: var(--text-tertiary); }
+    .file-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+    .img-preview-wrap { margin-top: 16px; display: none; position: relative; }
+    .img-preview {
+      max-width: 100%; max-height: 320px; display: block;
+      border: 1px solid var(--stroke);
+    }
+    .img-clear {
+      position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.5);
+      color: #fff; border: none; cursor: pointer; padding: 4px 8px;
+      font-family: var(--mono); font-size: 11px; text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .img-requires-api {
+      font-size: 13px; color: var(--text-secondary); margin-top: 12px;
+      padding: 10px 14px; background: var(--green-100); border-left: 2px solid var(--mid-green);
+    }
+    .img-requires-api a { color: var(--mid-green); cursor: pointer; text-decoration: underline; }
+
+    /* ── Checking State ──────────────────────────────────────────── */
+    .checking-overlay {
+      padding: 48px 32px; text-align: center; display: none;
+    }
+    .checking-overlay.visible { display: block; }
+    .win-thinking-anim {
+      width: 100px; margin: 0 auto 20px;
+      animation: think 0.9s ease-in-out infinite alternate;
+    }
+    @keyframes think { from{transform:rotate(-5deg) translateY(0)} to{transform:rotate(5deg) translateY(-8px)} }
+    .checking-text {
+      font-family: var(--mono); font-size: 13px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.06em; color: var(--mid-green);
+    }
+    .checking-dots::after { content: '...'; animation: dots 1.5s steps(4,end) infinite; }
+    @keyframes dots { 0%{content:''} 25%{content:'.'} 50%{content:'..'} 75%,100%{content:'...'} }
+
+    /* ── Results ─────────────────────────────────────────────────── */
+    .results-section {
+      padding: 80px 0; background: var(--off-white);
+      border-top: 1px solid var(--stroke); display: none;
+    }
+    .results-section.visible { display: block; }
+    .results-inner {
+      display: flex; gap: 48px; align-items: flex-start;
+      max-width: 900px; margin: 0 auto;
+    }
+    .win-panel { width: 180px; flex-shrink: 0; text-align: center; }
+    #win-avatar { width: 150px; display: block; margin: 0 auto; }
+    .win-says-label {
+      font-family: var(--mono); font-size: 11px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--text-tertiary); display: block; margin-top: 10px;
+    }
+
+    .analysis-panel { flex: 1; min-width: 0; }
+    .verdict-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--mono); font-size: 14px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 8px 18px; border: 1px solid; border-radius: 5px;
+      margin-bottom: 16px;
+    }
+    .verdict-pill.on-brand  { background: var(--near-black); border-color: transparent; color: var(--interaction); }
+    .verdict-pill.needs-work { background: var(--label-yellow); border-color: #c8d866; color: var(--near-black); }
+    .verdict-pill.off-brand  { background: #ffe2e2; border-color: #c08080; color: #331010; }
+
+    .verdict-summary { font-size: 18px; line-height: 1.5; margin-bottom: 24px; color: var(--text-primary); }
+
+    .win-quote {
+      background: var(--forest); color: var(--off-white);
+      padding: 24px 28px 24px 40px; position: relative;
+      margin-bottom: 28px; font-size: 16px; line-height: 1.6;
+      border-left: 3px solid var(--interaction);
+    }
+    .win-quote::before {
+      content: '"'; font-family: var(--serif); font-size: 52px;
+      color: var(--interaction); position: absolute; top: 6px; left: 10px;
+      line-height: 1;
+    }
+
+    .checks-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+    .check-item {
+      padding: 16px 20px; border: 1px solid var(--stroke);
+      background: var(--white); transition: border-color 0.15s;
+    }
+    .check-item.fail  { border-left: 3px solid #c08080; }
+    .check-item.warn  { border-left: 3px solid #c8b800; }
+    .check-item.pass  { border-left: 3px solid #057a28; }
+    .check-item-head  { display: flex; align-items: center; gap: 10px; margin-bottom: 0; }
+    .check-icon {
+      width: 20px; height: 20px; border-radius: 50%; display: flex;
+      align-items: center; justify-content: center; font-size: 10px;
+      font-weight: 700; flex-shrink: 0; font-family: var(--mono);
+    }
+    .check-icon.pass { background: #dfeae3; color: #057a28; }
+    .check-icon.warn { background: #EEFF8C; color: #586605; }
+    .check-icon.fail { background: #ffe2e2; color: #802828; }
+    .check-label {
+      font-family: var(--mono); font-size: 12px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.04em; flex: 1;
+    }
+    .check-label.pass { color: #057a28; }
+    .check-label.warn { color: #586605; }
+    .check-label.fail { color: #802828; }
+    .check-category {
+      font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--text-tertiary);
+      background: var(--green-100); padding: 2px 8px;
+    }
+    .check-excerpt {
+      font-family: var(--mono); font-size: 12px; background: var(--green-100);
+      padding: 6px 12px; margin-top: 10px; color: var(--text-secondary);
+      border-left: 2px solid var(--stroke); word-break: break-word;
+    }
+    .check-fix { font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin-top: 8px; }
+
+    .try-again-btn {
+      background: transparent; color: var(--forest);
+      border: 1px solid var(--stroke); padding: 12px 24px;
+      font-family: var(--mono); font-size: 12px; text-transform: uppercase;
+      letter-spacing: 0.06em; cursor: pointer; transition: all 0.2s;
+    }
+    .try-again-btn:hover { background: var(--green-100); border-color: var(--mid-green); }
+
+    /* ── How it works ────────────────────────────────────────────── */
+    .how-section {
+      padding: 100px 0; background: var(--forest); color: var(--off-white);
+    }
+    .how-section .section-header .eyebrow { color: var(--interaction); }
+    .how-section .h2-split { color: var(--off-white); }
+    .how-section .h2-split .sans { color: rgba(248,255,250,0.55); }
+
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2px; max-width: 900px; margin: 0 auto;
+    }
+    .step {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(0,255,100,0.07); padding: 40px 32px;
+      position: relative; overflow: hidden;
+    }
+    .step-num {
+      font-family: var(--serif); font-size: 72px; line-height: 1;
+      color: var(--interaction); opacity: 0.18;
+      position: absolute; top: 12px; right: 20px; user-select: none;
+    }
+    .step-icon {
+      width: 40px; height: 40px; background: rgba(0,255,100,0.07);
+      border: 1px solid rgba(0,255,100,0.14); display: flex;
+      align-items: center; justify-content: center; margin-bottom: 20px;
+      color: var(--interaction);
+    }
+    .step h3 { font-size: 20px; font-weight: 500; color: var(--off-white); margin-bottom: 10px; }
+    .step p  { font-size: 15px; line-height: 1.6; color: rgba(248,255,250,0.55); }
+
+    /* ── Footer ──────────────────────────────────────────────────── */
+    footer {
+      background: var(--near-black); color: rgba(248,255,250,0.35);
+      padding: 48px 0; text-align: center;
+    }
+    footer .logo { display: inline-flex; margin-bottom: 14px; }
+    .footer-text { font-size: 14px; line-height: 1.7; }
+
+    /* ── Settings Modal ──────────────────────────────────────────── */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+      z-index: 200; display: none; align-items: center; justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal { background: var(--white); border: 1px solid var(--stroke); width: 520px; max-width: 90vw; padding: 40px; }
+    .modal-title { font-family: var(--serif); font-size: 34px; margin-bottom: 8px; }
+    .modal-desc { font-size: 15px; color: var(--text-secondary); margin-bottom: 28px; line-height: 1.5; }
+    .form-group { margin-bottom: 20px; }
+    .form-label {
+      display: block; font-family: var(--mono); font-size: 11px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--text-secondary); margin-bottom: 8px;
+    }
+    .form-input {
+      width: 100%; padding: 12px 16px; font-family: var(--sans);
+      font-size: 15px; background: var(--off-white);
+      border: 1px solid var(--stroke); outline: none;
+      color: var(--text-primary); transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: var(--mid-green); }
+    .form-hint { font-size: 12px; color: var(--text-tertiary); margin-top: 6px; line-height: 1.5; }
+    .modal-actions { display: flex; gap: 12px; margin-top: 28px; }
+    .btn-secondary {
+      padding: 14px 24px; font-family: var(--sans); font-size: 16px; font-weight: 500;
+      background: var(--green-100); color: var(--forest); border: none; cursor: pointer; transition: background 0.2s;
+    }
+    .btn-secondary:hover { background: var(--super-light); }
+    .btn-ghost {
+      padding: 14px 24px; font-family: var(--sans); font-size: 15px;
+      background: transparent; color: var(--text-secondary);
+      border: 1px solid var(--stroke); cursor: pointer; transition: all 0.2s;
+    }
+    .btn-ghost:hover { background: var(--green-100); }
+
+    /* ── Win SVG eye blink ───────────────────────────────────────── */
+    .win-eye-l { transform-origin: 78px 120px; animation: blink 5s ease-in-out infinite; }
+    .win-eye-r { transform-origin: 122px 120px; animation: blink 5s ease-in-out infinite 0.12s; }
+    @keyframes blink { 0%,94%,100%{transform:scaleY(1)} 97%{transform:scaleY(0.08)} }
+
+    /* happy state */
+    .win-happy .win-eye-l, .win-happy .win-eye-r { animation: happyEye 2.5s ease-in-out infinite; }
+    @keyframes happyEye { 0%,100%{transform:scaleY(1)} 20%,40%{transform:scaleY(0.7)} }
+
+    /* concerned state - subtle squint */
+    .win-concerned .win-eye-l, .win-concerned .win-eye-r { animation: squint 0.6s ease-in-out infinite alternate; }
+    @keyframes squint { from{transform:scaleY(0.75)} to{transform:scaleY(0.85)} }
+
+    /* ── Utility ─────────────────────────────────────────────────── */
+    .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+
+    /* ── Responsive ──────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { flex-direction: column-reverse; text-align: center; gap: 40px; }
+      .hero-title { font-size: 52px; }
+      .hero-subtitle { max-width: 100%; }
+      .hero-owl-wrap { width: 180px; }
+      #win-hero { width: 160px; }
+      .h2-split { font-size: 44px; }
+      .results-inner { flex-direction: column; }
+      .win-panel { width: 100%; }
+      #win-avatar { width: 120px; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .container { padding: 0 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Site Header ──────────────────────────────────────────────── -->
+<header class="site-header">
+  <nav>
+    <a href="#" class="logo">
+      <span class="logo-dot"></span>
+      AirOps Brand
+    </a>
+    <button class="settings-btn" id="settings-btn">API Settings</button>
+  </nav>
+</header>
+
+<!-- ── Hero ─────────────────────────────────────────────────────── -->
+<section class="hero" id="top">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <span class="eyebrow hero-eyebrow">BRAND GUARDIAN</span>
+        <h1 class="hero-title">
+          <span class="serif">Meet Win,</span>
+          <span class="sans">your brand owl.</span>
+        </h1>
+        <p class="hero-subtitle">
+          Paste your copy or upload a design. Win checks it against the AirOps 2026 brand kit and tells you exactly what's on - and what's off - brand.
+        </p>
+        <a href="#check" class="btn-primary">
+          Check your content
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9h10M10 5l4 4-4 4" stroke="#002910" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="hero-owl-wrap">
+        <!-- WIN THE OWL -->
+        <svg id="win-hero" viewBox="0 0 200 225" xmlns="http://www.w3.org/2000/svg" aria-label="Win the AirOps brand guardian owl">
+          <!-- Body shadow -->
+          <ellipse cx="102" cy="136" rx="70" ry="68" fill="#0a1a10" opacity="0.12"/>
+          <!-- Wings -->
+          <ellipse cx="26" cy="150" rx="19" ry="30" fill="#4a8050" stroke="#1a2a18" stroke-width="3" transform="rotate(-10 26 150)"/>
+          <ellipse cx="174" cy="150" rx="19" ry="30" fill="#4a8050" stroke="#1a2a18" stroke-width="3" transform="rotate(10 174 150)"/>
+          <!-- Body -->
+          <circle cx="100" cy="132" r="69" fill="#558a5c" stroke="#1a2a18" stroke-width="3.5"/>
+          <!-- Face disc -->
+          <ellipse cx="100" cy="136" rx="43" ry="47" fill="#e5d4a0" stroke="#2a3820" stroke-width="2.5"/>
+          <!-- Ear tufts -->
+          <path d="M62 66 Q55 30 74 52 L68 66 Z" fill="#2e5038" stroke="#1a2a18" stroke-width="2.5"/>
+          <path d="M138 66 Q145 30 126 52 L132 66 Z" fill="#2e5038" stroke="#1a2a18" stroke-width="2.5"/>
+          <!-- Hat brim -->
+          <ellipse cx="100" cy="68" rx="57" ry="9" fill="#2e5038" stroke="#1a2a18" stroke-width="3"/>
+          <!-- Hat crown -->
+          <path d="M52 68 Q58 20 100 17 Q142 20 148 68 Z" fill="#3a6848" stroke="#1a2a18" stroke-width="3"/>
+          <!-- Hat band -->
+          <path d="M54 61 Q100 58 146 61 L148 68 Q100 65 52 68 Z" fill="#1a2a18" opacity="0.55"/>
+          <!-- Compass badge -->
+          <circle cx="100" cy="40" r="11" fill="#c09830" stroke="#1a2a18" stroke-width="2"/>
+          <circle cx="100" cy="40" r="8" fill="#d4a834"/>
+          <path d="M100 32 L100 48 M92 40 L108 40" stroke="#1a2a18" stroke-width="1.2"/>
+          <path d="M100 32 L102.5 40 L100 48 L97.5 40 Z" fill="#1a2a18" opacity="0.7"/>
+          <!-- Left eye -->
+          <g class="win-eye-l">
+            <circle cx="78" cy="120" r="20" fill="#1a2010" stroke="#1a2a18" stroke-width="2"/>
+            <circle cx="78" cy="120" r="13" fill="#2a7050"/>
+            <circle cx="78" cy="120" r="7.5" fill="#080c08"/>
+            <circle cx="85" cy="113" r="5" fill="#ffffff"/>
+            <circle cx="73" cy="125" r="2.5" fill="#ffffff" opacity="0.65"/>
+          </g>
+          <!-- Right eye -->
+          <g class="win-eye-r">
+            <circle cx="122" cy="120" r="20" fill="#1a2010" stroke="#1a2a18" stroke-width="2"/>
+            <circle cx="122" cy="120" r="13" fill="#2a7050"/>
+            <circle cx="122" cy="120" r="7.5" fill="#080c08"/>
+            <circle cx="129" cy="113" r="5" fill="#ffffff"/>
+            <circle cx="117" cy="125" r="2.5" fill="#ffffff" opacity="0.65"/>
+          </g>
+          <!-- Beak -->
+          <path d="M93 143 L107 143 L100 158 Z" fill="#4a8050" stroke="#1a2a18" stroke-width="2"/>
+          <!-- Cheeks -->
+          <ellipse cx="60" cy="136" rx="13" ry="8" fill="#e06050" opacity="0.5"/>
+          <ellipse cx="140" cy="136" rx="13" ry="8" fill="#e06050" opacity="0.5"/>
+          <!-- AirOps badge -->
+          <circle cx="100" cy="174" r="17" fill="#ffffff" stroke="#1a2a18" stroke-width="2.5"/>
+          <text x="100" y="172" text-anchor="middle" font-family="'Saans Mono','DM Mono',monospace" font-size="6.5" font-weight="600" fill="#1a2a18">air</text>
+          <text x="100" y="181" text-anchor="middle" font-family="'Saans Mono','DM Mono',monospace" font-size="6.5" font-weight="600" fill="#1a2a18">ops</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Brand Check ───────────────────────────────────────────────── -->
+<section class="brand-check" id="check">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">BRAND CHECK</span>
+      <h2 class="h2-split">
+        <span class="serif">Is it on brand?</span>
+        <span class="sans">Let Win decide.</span>
+      </h2>
+    </div>
+
+    <div class="input-panel">
+      <div class="input-tabs" role="tablist">
+        <button class="tab-btn active" data-tab="text" role="tab" aria-selected="true">Paste copy</button>
+        <button class="tab-btn" data-tab="image" role="tab" aria-selected="false">Upload design</button>
+      </div>
+
+      <!-- Text tab -->
+      <div class="tab-pane active" id="tab-text">
+        <textarea
+          class="brand-textarea"
+          id="copy-input"
+          placeholder="Paste your headline, body copy, button labels, or CSS here. Win will check it against the brand guidelines..."
+          rows="8"
+          aria-label="Copy to check"
+        ></textarea>
+        <div class="input-actions">
+          <span class="char-count" id="char-count">0 characters</span>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span class="api-mode-badge" id="mode-badge" title="Click to configure API">Demo mode</span>
+            <button class="btn-primary" id="check-text-btn" style="padding:12px 24px;font-size:16px">
+              Check it, Win!
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image tab -->
+      <div class="tab-pane" id="tab-image">
+        <div class="dropzone" id="dropzone">
+          <input type="file" class="file-input" id="file-input" accept="image/*" aria-label="Upload design file">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <rect x="4" y="8" width="32" height="24" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <circle cx="14" cy="16" r="3" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M4 26l8-6 7 5 5-4 12 11" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+          <span class="dropzone-label">Drop your design here</span>
+          <span class="dropzone-sublabel">PNG, JPG, or WebP - up to 10 MB</span>
+        </div>
+        <div class="img-preview-wrap" id="img-preview-wrap">
+          <img class="img-preview" id="img-preview" src="" alt="Uploaded design preview">
+          <button class="img-clear" id="img-clear">Remove</button>
+        </div>
+        <p class="img-requires-api" id="img-api-note" style="display:none">
+          Image analysis requires a live API connection. <a id="configure-api-link">Configure API settings</a> to enable Win's vision mode.
+        </p>
+        <div class="input-actions" style="margin-top:16px">
+          <span class="char-count" id="img-filename"></span>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span class="api-mode-badge" id="img-mode-badge">Demo mode</span>
+            <button class="btn-primary" id="check-image-btn" style="padding:12px 24px;font-size:16px" disabled>
+              Check it, Win!
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Checking overlay -->
+      <div class="checking-overlay" id="checking-overlay">
+        <svg class="win-thinking-anim" viewBox="0 0 200 225" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="26" cy="150" rx="19" ry="30" fill="#4a8050" stroke="#1a2a18" stroke-width="3" transform="rotate(-10 26 150)"/>
+          <ellipse cx="174" cy="150" rx="19" ry="30" fill="#4a8050" stroke="#1a2a18" stroke-width="3" transform="rotate(10 174 150)"/>
+          <circle cx="100" cy="132" r="69" fill="#558a5c" stroke="#1a2a18" stroke-width="3.5"/>
+          <ellipse cx="100" cy="136" rx="43" ry="47" fill="#e5d4a0" stroke="#2a3820" stroke-width="2.5"/>
+          <path d="M62 66 Q55 30 74 52 L68 66 Z" fill="#2e5038" stroke="#1a2a18" stroke-width="2.5"/>
+          <path d="M138 66 Q145 30 126 52 L132 66 Z" fill="#2e5038" stroke="#1a2a18" stroke-width="2.5"/>
+          <ellipse cx="100" cy="68" rx="57" ry="9" fill="#2e5038" stroke="#1a2a18" stroke-width="3"/>
+          <path d="M52 68 Q58 20 100 17 Q142 20 148 68 Z" fill="#3a6848" stroke="#1a2a18" stroke-width="3"/>
+          <path d="M54 61 Q100 58 146 61 L148 68 Q100 65 52 68 Z" fill="#1a2a18" opacity="0.55"/>
+          <!-- Compass pulses while thinking -->
+          <circle cx="100" cy="40" r="11" fill="#c09830" stroke="#1a2a18" stroke-width="2">
+            <animate attributeName="r" values="11;13;11" dur="1s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="100" cy="40" r="8" fill="#d4a834"/>
+          <path d="M100 32 L100 48 M92 40 L108 40" stroke="#1a2a18" stroke-width="1.2">
+            <animateTransform attributeName="transform" type="rotate" from="0 100 40" to="360 100 40" dur="2s" repeatCount="indefinite"/>
+          </path>
+          <circle cx="78" cy="120" r="20" fill="#1a2010" stroke="#1a2a18" stroke-width="2"/>
+          <circle cx="78" cy="120" r="13" fill="#2a7050"/>
+          <circle cx="78" cy="120" r="7.5" fill="#080c08"/>
+          <circle cx="85" cy="113" r="5" fill="#ffffff" opacity="0.8">
+            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="0.8s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="122" cy="120" r="20" fill="#1a2010" stroke="#1a2a18" stroke-width="2"/>
+          <circle cx="122" cy="120" r="13" fill="#2a7050"/>
+          <circle cx="122" cy="120" r="7.5" fill="#080c08"/>
+          <circle cx="129" cy="113" r="5" fill="#ffffff" opacity="0.8">
+            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="0.8s" begin="0.2s" repeatCount="indefinite"/>
+          </circle>
+          <path d="M93 143 L107 143 L100 158 Z" fill="#4a8050" stroke="#1a2a18" stroke-width="2"/>
+          <ellipse cx="60" cy="136" rx="13" ry="8" fill="#e06050" opacity="0.5"/>
+          <ellipse cx="140" cy="136" rx="13" ry="8" fill="#e06050" opacity="0.5"/>
+          <circle cx="100" cy="174" r="17" fill="#ffffff" stroke="#1a2a18" stroke-width="2.5"/>
+          <text x="100" y="172" text-anchor="middle" font-family="'Saans Mono','DM Mono',monospace" font-size="6.5" font-weight="600" fill="#1a2a18">air</text>
+          <text x="100" y="181" text-anchor="middle" font-family="'Saans Mono','DM Mono',monospace" font-size="6.5" font-weight="600" fill="#1a2a18">ops</text>
+        </svg>
+        <p class="checking-text">Checking against brand kit<span class="checking-dots"></span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Results ───────────────────────────────────────────────────── -->
+<section class="results-section" id="results">
+  <div class="container">
+    <div class="results-inner">
+      <!-- Win avatar -->
+      <div class="win-panel">
+        <svg id="win-avatar" viewBox="0 0 200 225" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="26" cy="150" rx="19" ry="30" fill="#4a8050" stroke="#1a2a18" stroke-width="3" transform="rotate(-10 26 150)"/>
+          <ellipse cx="174" cy="150" rx="19" ry="30" fill="#4a8050" stroke="#1a2a18" stroke-width="3" transform="rotate(10 174 150)"/>
+          <circle cx="100" cy="132" r="69" fill="#558a5c" stroke="#1a2a18" stroke-width="3.5"/>
+          <ellipse cx="100" cy="136" rx="43" ry="47" fill="#e5d4a0" stroke="#2a3820" stroke-width="2.5"/>
+          <path d="M62 66 Q55 30 74 52 L68 66 Z" fill="#2e5038" stroke="#1a2a18" stroke-width="2.5"/>
+          <path d="M138 66 Q145 30 126 52 L132 66 Z" fill="#2e5038" stroke="#1a2a18" stroke-width="2.5"/>
+          <ellipse cx="100" cy="68" rx="57" ry="9" fill="#2e5038" stroke="#1a2a18" stroke-width="3"/>
+          <path d="M52 68 Q58 20 100 17 Q142 20 148 68 Z" fill="#3a6848" stroke="#1a2a18" stroke-width="3"/>
+          <path d="M54 61 Q100 58 146 61 L148 68 Q100 65 52 68 Z" fill="#1a2a18" opacity="0.55"/>
+          <circle cx="100" cy="40" r="11" fill="#c09830" stroke="#1a2a18" stroke-width="2"/>
+          <circle cx="100" cy="40" r="8" fill="#d4a834"/>
+          <path d="M100 32 L100 48 M92 40 L108 40" stroke="#1a2a18" stroke-width="1.2"/>
+          <path d="M100 32 L102.5 40 L100 48 L97.5 40 Z" fill="#1a2a18" opacity="0.7"/>
+          <!-- Left eye (iris class for expression control) -->
+          <g class="win-eye-l">
+            <circle cx="78" cy="120" r="20" fill="#1a2010" stroke="#1a2a18" stroke-width="2"/>
+            <circle class="win-iris-l" cx="78" cy="120" r="13" fill="#2a7050"/>
+            <circle cx="78" cy="120" r="7.5" fill="#080c08"/>
+            <circle id="glow-l" cx="85" cy="113" r="5" fill="#ffffff"/>
+            <circle cx="73" cy="125" r="2.5" fill="#ffffff" opacity="0.65"/>
+          </g>
+          <!-- Right eye (iris class for expression control) -->
+          <g class="win-eye-r">
+            <circle cx="122" cy="120" r="20" fill="#1a2010" stroke="#1a2a18" stroke-width="2"/>
+            <circle class="win-iris-r" cx="122" cy="120" r="13" fill="#2a7050"/>
+            <circle cx="122" cy="120" r="7.5" fill="#080c08"/>
+            <circle id="glow-r" cx="129" cy="113" r="5" fill="#ffffff"/>
+            <circle cx="117" cy="125" r="2.5" fill="#ffffff" opacity="0.65"/>
+          </g>
+          <path d="M93 143 L107 143 L100 158 Z" fill="#4a8050" stroke="#1a2a18" stroke-width="2"/>
+          <ellipse cx="60" cy="136" rx="13" ry="8" fill="#e06050" opacity="0.5"/>
+          <ellipse cx="140" cy="136" rx="13" ry="8" fill="#e06050" opacity="0.5"/>
+          <circle cx="100" cy="174" r="17" fill="#ffffff" stroke="#1a2a18" stroke-width="2.5"/>
+          <text x="100" y="172" text-anchor="middle" font-family="'Saans Mono','DM Mono',monospace" font-size="6.5" font-weight="600" fill="#1a2a18">air</text>
+          <text x="100" y="181" text-anchor="middle" font-family="'Saans Mono','DM Mono',monospace" font-size="6.5" font-weight="600" fill="#1a2a18">ops</text>
+        </svg>
+        <span class="win-says-label">Win says</span>
+      </div>
+
+      <!-- Analysis -->
+      <div class="analysis-panel" id="analysis-panel">
+        <div class="verdict-pill on-brand" id="verdict-pill">
+          <span id="verdict-icon">✓</span>
+          <span id="verdict-text">On Brand</span>
+        </div>
+        <p class="verdict-summary" id="verdict-summary"></p>
+        <div class="win-quote" id="win-quote"></div>
+        <ul class="checks-list" id="checks-list"></ul>
+        <button class="try-again-btn" id="try-again-btn">Check something else</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── How It Works ──────────────────────────────────────────────── -->
+<section class="how-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">HOW IT WORKS</span>
+      <h2 class="h2-split">
+        <span class="serif">Three steps</span>
+        <span class="sans">to brand confidence.</span>
+      </h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step">
+        <span class="step-num">1</span>
+        <div class="step-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="3" width="14" height="14" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M6 7h8M6 10h6M6 13h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>Paste or upload</h3>
+        <p>Drop in your copy, a headline, button labels, CSS - or upload a screenshot of your design. Win handles both.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <div class="step-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M10 7v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>Win reviews it</h3>
+        <p>Win checks your content against the full AirOps 2026 brand kit - colors, typography, copy rules, and component patterns.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <div class="step-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>Get a clear verdict</h3>
+        <p>On Brand, Needs Work, or Off Brand - with specific rule references and exact fixes so you know what to do next.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ────────────────────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <a href="#top" class="logo" style="margin-bottom:16px;display:inline-flex">
+      <span class="logo-dot" style="background:rgba(0,255,100,0.4)"></span>
+      AirOps Brand
+    </a>
+    <p class="footer-text">
+      Win uses the AirOps 2026 brand kit.<br>
+      For deep analysis, connect a live API endpoint in Settings.
+    </p>
+  </div>
+</footer>
+
+<!-- ── Settings Modal ────────────────────────────────────────────── -->
+<div class="modal-backdrop" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <h2 class="modal-title" id="modal-title">API Settings</h2>
+    <p class="modal-desc">
+      Connect Win to a live API endpoint for AI-powered analysis and image vision. Without an endpoint, Win uses the built-in rule engine.
+    </p>
+    <div class="form-group">
+      <label class="form-label" for="api-endpoint">API Endpoint</label>
+      <input type="url" class="form-input" id="api-endpoint" placeholder="http://localhost:3001/api/analyze">
+      <p class="form-hint">
+        Run the included <code>server.js</code> locally, or point to your AirOps workflow endpoint.
+        The server proxies requests to Claude with the full brand kit as system context.
+      </p>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="api-key">API Key (optional)</label>
+      <input type="password" class="form-input" id="api-key" placeholder="sk-ant-... or AirOps key">
+      <p class="form-hint">Sent as the Authorization header. Leave blank for unauthenticated local endpoints.</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" id="save-settings-btn">Save settings</button>
+      <button class="btn-ghost" id="close-modal-btn">Cancel</button>
+      <button class="btn-ghost" id="clear-settings-btn" style="margin-left:auto;color:#802828">Clear</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Script ─────────────────────────────────────────────────────── -->
+<script>
+/* =================================================================
+   WIN BRAND ASSISTANT — JavaScript
+   Architecture:
+   - analyzeText()    : client-side rule engine (always available)
+   - analyzeViaAPI()  : calls configured endpoint (live mode)
+   - renderResults()  : builds the results UI
+   - winExpression()  : animates Win's face based on verdict
+   ================================================================= */
+
+const BRAND_COLORS = new Set([
+  '000d05','002910','008c44','00ff64','ccffe0','dfeae3','f8fffa','ffffff',
+  'eeff8c','d4e8da','09090b','676c79','a5aab6',
+  // web palette
+  'fff7ff','fee7fd','c54b9b','3a092c','0d020a',
+  'f5f6ff','e5e5ff','1b1b8f','0f0f57',
+  'fff0f0','ffe2e2','802828','331010',
+  'fdfff3','eeff8c','586605','242603',
+  'f8f7ff','ddd3f2','5a3480','2a084d',
+  'f2fcff','c9ebf2','196c80','0a3945',
+  // chart
+  '009b32','001408','a9a9a9','00250e','ccffe0',
+  // common derived
+  '00cc50','003819','001d0a','003a16','001408',
+  'eef9f3','057a28','003d18','004020',
+]);
+
+const BRAND_RULES = [
+  {
+    id: 'em-dash',
+    name: 'No em dashes',
+    category: 'Copy',
+    severity: 'fail',
+    test(text) {
+      const rx = /(.{0,30})(—)(.{0,30})/g;
+      const hits = [];
+      let m;
+      while ((m = rx.exec(text)) !== null) {
+        hits.push({
+          excerpt: (m[1] + m[2] + m[3]).trim(),
+          fix: `Replace the em dash with a spaced hyphen: "${m[1].trim()} - ${m[3].trim()}"`
+        });
+      }
+      return hits;
+    },
+    passMsg: 'No em dashes detected - copy is clean'
+  },
+  {
+    id: 'gradient',
+    name: 'No gradients',
+    category: 'Design',
+    severity: 'fail',
+    test(text) {
+      const rx = /gradient/gi;
+      return rx.test(text) ? [{ fix: 'AirOps brand prohibits gradients. Use flat brand colors from the palette.' }] : [];
+    },
+    passMsg: 'No gradient references found'
+  },
+  {
+    id: 'drop-shadow',
+    name: 'No drop shadows',
+    category: 'Design',
+    severity: 'fail',
+    test(text) {
+      const rx = /drop[\s-]?shadow|box[\s-]?shadow/gi;
+      return rx.test(text) ? [{ fix: 'Remove drop/box shadows. The AirOps brand is flat and sharp.' }] : [];
+    },
+    passMsg: 'No drop or box shadows referenced'
+  },
+  {
+    id: 'ai-aesthetic',
+    name: 'No purple/blue AI aesthetics',
+    category: 'Design',
+    severity: 'warn',
+    test(text) {
+      const rx = /purple[\s\w]{0,20}(gradient|theme|glow|background)|blue[\s\w]{0,20}(gradient|glow|ai)|neon|glassmorphism|frosted[\s-]?glass/gi;
+      const hits = [];
+      let m;
+      while ((m = rx.exec(text)) !== null) {
+        hits.push({ excerpt: m[0].trim(), fix: 'Avoid purple/blue AI aesthetics. AirOps uses deep greens only.' });
+      }
+      return hits;
+    },
+    passMsg: 'No AI-aesthetic language detected'
+  },
+  {
+    id: 'border-radius',
+    name: 'Corner radius usage',
+    category: 'Design',
+    severity: 'warn',
+    test(text) {
+      const rx = /border-radius\s*:\s*(\d+)px/gi;
+      const allowed = new Set([0, 3, 4, 5, 8, 58]);
+      const hits = [];
+      let m;
+      while ((m = rx.exec(text)) !== null) {
+        const val = parseInt(m[1]);
+        if (!allowed.has(val)) {
+          hits.push({
+            excerpt: m[0],
+            fix: `Allowed values: 0 (most UI), 5px (pills/tags), 8px (small buttons), 58px (primary button). Found: ${val}px`
+          });
+        }
+      }
+      return hits;
+    },
+    passMsg: 'Border-radius values are on brand'
+  },
+  {
+    id: 'off-brand-colors',
+    name: 'Off-brand hex colors',
+    category: 'Color',
+    severity: 'warn',
+    test(text) {
+      const rx = /#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b/g;
+      const hits = [];
+      let m;
+      while ((m = rx.exec(text)) !== null) {
+        const hex = m[1].toLowerCase();
+        const hex6 = hex.length === 3
+          ? hex.split('').map(c => c + c).join('')
+          : hex;
+        if (!BRAND_COLORS.has(hex6)) {
+          hits.push({
+            excerpt: m[0],
+            fix: `"${m[0]}" is not in the AirOps palette. See CLAUDE.md for approved colors.`
+          });
+        }
+        if (hits.length >= 3) break;
+      }
+      return hits;
+    },
+    passMsg: 'All hex colors are from the brand palette'
+  },
+  {
+    id: 'rounded-bars',
+    name: 'Bar charts have sharp tops',
+    category: 'Data Viz',
+    severity: 'fail',
+    test(text) {
+      if (/bar[\s-]?chart|bar[\s-]?graph/i.test(text) && /rounded|radius/i.test(text)) {
+        return [{ fix: 'Bar charts must have sharp (squared) tops - never rounded.' }];
+      }
+      return [];
+    },
+    passMsg: 'No rounded bar references'
+  },
+  {
+    id: 'eyebrow-case',
+    name: 'Eyebrow tags are ALL CAPS',
+    category: 'Typography',
+    severity: 'warn',
+    test(text) {
+      // Look for patterns that look like eyebrow/label context and are lowercase
+      const rx = /(?:eyebrow|label|tag|pill)[:\s"']+([a-z][a-z\s]{2,30})/gi;
+      const hits = [];
+      let m;
+      while ((m = rx.exec(text)) !== null) {
+        hits.push({
+          excerpt: m[0],
+          fix: `Eyebrow/tag text must be ALL CAPS: "${m[1].toUpperCase()}"`
+        });
+      }
+      return hits;
+    },
+    passMsg: 'Eyebrow tag casing looks correct'
+  }
+];
+
+const WIN_QUOTES = {
+  on_brand: [
+    "Clean, precise, and very much us. I didn't find a single violation. Push it live.",
+    "This is exactly right. Crisp copy, correct colors, nothing out of place. Well done.",
+    "Not a single em dash, not a stray border-radius. This one's ready to go.",
+  ],
+  needs_work: [
+    "Getting there - but a few things need attention before this is ready to publish.",
+    "Almost. A couple of brand rules to address and this will be solid.",
+    "Good instincts, but I spotted some issues. Quick fixes and you're there.",
+  ],
+  off_brand: [
+    "Oh dear. This needs some work. Let me walk you through what to fix.",
+    "A few things here that aren't us at all. Let's address them one by one.",
+    "Several brand rules broken here. The fixes are straightforward - read on.",
+  ],
+};
+
+/* ── State ──────────────────────────────────────────────────────── */
+const state = {
+  apiEndpoint: localStorage.getItem('win_api_endpoint') || '',
+  apiKey: localStorage.getItem('win_api_key') || '',
+  uploadedFile: null,
+  uploadedDataUrl: null,
+};
+
+/* ── DOM refs ───────────────────────────────────────────────────── */
+const $ = id => document.getElementById(id);
+const copyInput       = $('copy-input');
+const charCount       = $('char-count');
+const checkTextBtn    = $('check-text-btn');
+const checkImageBtn   = $('check-image-btn');
+const checkingOverlay = $('checking-overlay');
+const resultsSection  = $('results');
+const verdictPill     = $('verdict-pill');
+const verdictIcon     = $('verdict-icon');
+const verdictText     = $('verdict-text');
+const verdictSummary  = $('verdict-summary');
+const winQuoteEl      = $('win-quote');
+const checksList      = $('checks-list');
+const tryAgainBtn     = $('try-again-btn');
+const dropzone        = $('dropzone');
+const fileInput       = $('file-input');
+const imgPreviewWrap  = $('img-preview-wrap');
+const imgPreview      = $('img-preview');
+const imgClear        = $('img-clear');
+const imgFilename     = $('img-filename');
+const settingsBtn     = $('settings-btn');
+const settingsModal   = $('settings-modal');
+const closeModalBtn   = $('close-modal-btn');
+const saveSettingsBtn = $('save-settings-btn');
+const clearSettingsBtn= $('clear-settings-btn');
+const apiEndpointInput= $('api-endpoint');
+const apiKeyInput     = $('api-key');
+const modeBadge       = $('mode-badge');
+const imgModeBadge    = $('img-mode-badge');
+const imgApiNote      = $('img-api-note');
+const configApiLink   = $('configure-api-link');
+
+/* ── Tab switching ──────────────────────────────────────────────── */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+    });
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+    $('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ── Char count ─────────────────────────────────────────────────── */
+copyInput.addEventListener('input', () => {
+  const n = copyInput.value.length;
+  charCount.textContent = `${n.toLocaleString()} character${n !== 1 ? 's' : ''}`;
+});
+
+/* ── File upload ─────────────────────────────────────────────────── */
+function handleFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  state.uploadedFile = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    state.uploadedDataUrl = e.target.result;
+    imgPreview.src = e.target.result;
+    imgPreviewWrap.style.display = 'block';
+    imgFilename.textContent = file.name;
+    checkImageBtn.disabled = false;
+    if (!state.apiEndpoint) {
+      imgApiNote.style.display = 'block';
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag-over'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
+dropzone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropzone.classList.remove('drag-over');
+  handleFile(e.dataTransfer.files[0]);
+});
+imgClear.addEventListener('click', () => {
+  state.uploadedFile = null; state.uploadedDataUrl = null;
+  imgPreviewWrap.style.display = 'none'; imgApiNote.style.display = 'none';
+  imgFilename.textContent = ''; fileInput.value = '';
+  checkImageBtn.disabled = true;
+});
+
+/* ── Mode badge ─────────────────────────────────────────────────── */
+function updateModeBadges() {
+  const live = !!state.apiEndpoint;
+  [modeBadge, imgModeBadge].forEach(b => {
+    b.textContent = live ? 'Live API' : 'Demo mode';
+    b.classList.toggle('live', live);
+    b.title = live ? `Endpoint: ${state.apiEndpoint}` : 'Configure API for AI-powered analysis';
+  });
+}
+modeBadge.addEventListener('click', () => openModal());
+imgModeBadge.addEventListener('click', () => openModal());
+
+/* ── Settings modal ─────────────────────────────────────────────── */
+function openModal() {
+  apiEndpointInput.value = state.apiEndpoint;
+  apiKeyInput.value = state.apiKey;
+  settingsModal.classList.add('open');
+}
+function closeModal() { settingsModal.classList.remove('open'); }
+settingsBtn.addEventListener('click', openModal);
+closeModalBtn.addEventListener('click', closeModal);
+settingsModal.addEventListener('click', e => { if (e.target === settingsModal) closeModal(); });
+configApiLink && configApiLink.addEventListener('click', openModal);
+saveSettingsBtn.addEventListener('click', () => {
+  state.apiEndpoint = apiEndpointInput.value.trim();
+  state.apiKey = apiKeyInput.value.trim();
+  localStorage.setItem('win_api_endpoint', state.apiEndpoint);
+  localStorage.setItem('win_api_key', state.apiKey);
+  updateModeBadges();
+  closeModal();
+});
+clearSettingsBtn.addEventListener('click', () => {
+  state.apiEndpoint = ''; state.apiKey = '';
+  localStorage.removeItem('win_api_endpoint'); localStorage.removeItem('win_api_key');
+  apiEndpointInput.value = ''; apiKeyInput.value = '';
+  updateModeBadges();
+});
+
+/* ── Text check ─────────────────────────────────────────────────── */
+checkTextBtn.addEventListener('click', async () => {
+  const text = copyInput.value.trim();
+  if (!text) { copyInput.focus(); return; }
+  await runCheck('text', text);
+});
+
+/* ── Image check ─────────────────────────────────────────────────── */
+checkImageBtn.addEventListener('click', async () => {
+  if (!state.uploadedDataUrl) return;
+  if (!state.apiEndpoint) { openModal(); return; }
+  await runCheck('image', state.uploadedDataUrl);
+});
+
+/* ── Core check runner ──────────────────────────────────────────── */
+async function runCheck(type, content) {
+  // Show loading
+  resultsSection.classList.remove('visible');
+  checkingOverlay.classList.add('visible');
+  checkTextBtn.disabled = true;
+  checkImageBtn.disabled = true;
+
+  // Scroll to loading
+  document.querySelector('.brand-check').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  let result;
+  try {
+    if (state.apiEndpoint && type === 'text') {
+      result = await analyzeViaAPI(type, content);
+    } else if (state.apiEndpoint && type === 'image') {
+      result = await analyzeViaAPI(type, content);
+    } else {
+      // Demo mode: client-side rule engine
+      await new Promise(r => setTimeout(r, 1200)); // feel authentic
+      result = type === 'text' ? analyzeText(content) : demoImageResult();
+    }
+  } catch (err) {
+    result = errorResult(err.message);
+  }
+
+  checkingOverlay.classList.remove('visible');
+  checkTextBtn.disabled = false;
+  checkImageBtn.disabled = !state.uploadedFile;
+  renderResults(result);
+}
+
+/* ── Client-side text analysis ──────────────────────────────────── */
+function analyzeText(text) {
+  const issues = [];
+  const passes = [];
+
+  BRAND_RULES.forEach(rule => {
+    const hits = rule.test(text);
+    if (hits.length > 0) {
+      hits.forEach(h => issues.push({ ...h, name: rule.name, severity: rule.severity, category: rule.category }));
+    } else {
+      passes.push({ name: rule.name, msg: rule.passMsg, category: rule.category });
+    }
+  });
+
+  const failCount  = issues.filter(i => i.severity === 'fail').length;
+  const warnCount  = issues.filter(i => i.severity === 'warn').length;
+
+  let verdict;
+  if (failCount >= 2)       verdict = 'off_brand';
+  else if (failCount >= 1 || warnCount >= 2) verdict = 'needs_work';
+  else if (warnCount >= 1)  verdict = 'needs_work';
+  else                      verdict = 'on_brand';
+
+  const quotes  = WIN_QUOTES[verdict];
+  const summary = verdict === 'on_brand'
+    ? `Win found no brand violations. ${passes.length} check${passes.length !== 1 ? 's' : ''} passed.`
+    : `Win found ${issues.length} item${issues.length !== 1 ? 's' : ''} to address across ${[...new Set(issues.map(i => i.category))].join(', ')}.`;
+
+  return { verdict, summary, win_quote: quotes[Math.floor(Math.random() * quotes.length)], issues, passes };
+}
+
+/* ── Demo result for images (no API) ───────────────────────────── */
+function demoImageResult() {
+  return {
+    verdict: 'needs_work',
+    summary: 'Win can see your design, but image analysis requires a live API connection for a real verdict.',
+    win_quote: "I can see something uploaded here, but my vision mode needs the API enabled. Pop open Settings and add an endpoint - then I can give you a proper read on this.",
+    issues: [{
+      name: 'API required for image analysis',
+      severity: 'warn',
+      category: 'Setup',
+      fix: 'Configure an API endpoint in Settings to enable Win\'s full vision mode.',
+    }],
+    passes: []
+  };
+}
+
+/* ── Error result ────────────────────────────────────────────────── */
+function errorResult(msg) {
+  return {
+    verdict: 'needs_work',
+    summary: 'Could not reach the API endpoint. Falling back to demo mode.',
+    win_quote: "Something went wrong reaching the API. Check the endpoint URL in Settings and try again.",
+    issues: [{ name: 'API connection error', severity: 'warn', category: 'Setup', fix: msg }],
+    passes: []
+  };
+}
+
+/* ── API call ────────────────────────────────────────────────────── */
+async function analyzeViaAPI(type, content) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (state.apiKey) headers['Authorization'] = `Bearer ${state.apiKey}`;
+
+  const body = type === 'image'
+    ? { type: 'image', content: content.split(',')[1], mimeType: state.uploadedFile.type }
+    : { type: 'text', content };
+
+  const res = await fetch(state.apiEndpoint, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) throw new Error(`API responded with ${res.status}`);
+  return await res.json();
+}
+
+/* ── Render results ──────────────────────────────────────────────── */
+function renderResults(result) {
+  // Verdict pill
+  const { verdict, summary, win_quote, issues, passes } = result;
+  verdictPill.className = 'verdict-pill ' + verdict.replace('_', '-');
+  if (verdict === 'on_brand') {
+    verdictIcon.textContent = '✓'; verdictText.textContent = 'On Brand';
+  } else if (verdict === 'needs_work') {
+    verdictIcon.textContent = '~'; verdictText.textContent = 'Needs Work';
+  } else {
+    verdictIcon.textContent = '✕'; verdictText.textContent = 'Off Brand';
+  }
+
+  verdictSummary.textContent = summary;
+  winQuoteEl.textContent = win_quote;
+
+  // Checks list
+  checksList.innerHTML = '';
+  issues.forEach(item => {
+    const li = document.createElement('li');
+    li.className = 'check-item ' + (item.severity || 'warn');
+    li.innerHTML = `
+      <div class="check-item-head">
+        <span class="check-icon ${item.severity === 'fail' ? 'fail' : 'warn'}">
+          ${item.severity === 'fail' ? '✕' : '!'}
+        </span>
+        <span class="check-label ${item.severity === 'fail' ? 'fail' : 'warn'}">${escHtml(item.name)}</span>
+        <span class="check-category">${escHtml(item.category || '')}</span>
+      </div>
+      ${item.excerpt ? `<div class="check-excerpt">${escHtml(item.excerpt)}</div>` : ''}
+      ${item.fix    ? `<p class="check-fix">${escHtml(item.fix)}</p>` : ''}
+    `;
+    checksList.appendChild(li);
+  });
+
+  passes.forEach(p => {
+    const li = document.createElement('li');
+    li.className = 'check-item pass';
+    li.innerHTML = `
+      <div class="check-item-head">
+        <span class="check-icon pass">✓</span>
+        <span class="check-label pass">${escHtml(p.msg || p.name)}</span>
+        <span class="check-category">${escHtml(p.category || '')}</span>
+      </div>
+    `;
+    checksList.appendChild(li);
+  });
+
+  // Win expression
+  winExpression(verdict);
+
+  // Show results
+  resultsSection.classList.add('visible');
+  resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ── Win expression based on verdict ────────────────────────────── */
+function winExpression(verdict) {
+  const avatar = $('win-avatar');
+  avatar.classList.remove('win-happy', 'win-concerned');
+  const irisL = avatar.querySelector('.win-iris-l');
+  const irisR = avatar.querySelector('.win-iris-r');
+
+  if (verdict === 'on_brand') {
+    avatar.classList.add('win-happy');
+    if (irisL) irisL.setAttribute('fill', '#1a9060');
+    if (irisR) irisR.setAttribute('fill', '#1a9060');
+  } else if (verdict === 'needs_work') {
+    if (irisL) irisL.setAttribute('fill', '#8a6820');
+    if (irisR) irisR.setAttribute('fill', '#8a6820');
+  } else {
+    avatar.classList.add('win-concerned');
+    if (irisL) irisL.setAttribute('fill', '#7a3020');
+    if (irisR) irisR.setAttribute('fill', '#7a3020');
+  }
+}
+
+/* ── Try again ───────────────────────────────────────────────────── */
+tryAgainBtn.addEventListener('click', () => {
+  resultsSection.classList.remove('visible');
+  copyInput.value = ''; charCount.textContent = '0 characters';
+  document.querySelector('#check').scrollIntoView({ behavior: 'smooth' });
+  copyInput.focus();
+  $('win-avatar').classList.remove('win-happy', 'win-concerned');
+});
+
+/* ── Util ────────────────────────────────────────────────────────── */
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── Init ────────────────────────────────────────────────────────── */
+updateModeBadges();
+if (state.apiEndpoint) {
+  apiEndpointInput.value = state.apiEndpoint;
+  apiKeyInput.value = state.apiKey;
+}
+</script>
+</body>
+</html>
