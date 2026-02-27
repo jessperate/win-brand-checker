@@ -970,7 +970,7 @@ const WIN_QUOTES = {
 
 /* ── State ──────────────────────────────────────────────────────── */
 const state = {
-  apiEndpoint: localStorage.getItem('win_api_endpoint') || '',
+  apiEndpoint: localStorage.getItem('win_api_endpoint') || (location.hostname !== 'localhost' && location.protocol !== 'file:' ? '/api/analyze' : ''),
   apiKey: localStorage.getItem('win_api_key') || '',
   uploadedFile: null,
   uploadedDataUrl: null,

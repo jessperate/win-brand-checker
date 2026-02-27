@@ -345,21 +345,25 @@ app.post('/api/analyze', async (req, res) => {
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok', model: 'claude-opus-4-6' }));
 
-// ── Start ─────────────────────────────────────────────────────────────────────
+// ── Init brand kit ────────────────────────────────────────────────────────────
+// Runs at module load so Vercel serverless warm starts pick it up.
 
-async function start() {
-  // Try to load a live brand kit from AirOps API
-  const liveBrandKit = await fetchLiveBrandKit();
+fetchLiveBrandKit().then(liveBrandKit => {
   if (liveBrandKit) {
     systemPrompt = buildSystemPrompt(liveBrandKit);
+    console.log('Brand kit: AirOps API (live)');
+  } else {
+    console.log('Brand kit: static seed (brand kit ID 26564)');
   }
+}).catch(err => console.warn('Brand kit init error:', err.message));
 
+// ── Local dev ─────────────────────────────────────────────────────────────────
+
+if (!process.env.VERCEL) {
   app.listen(PORT, () => {
-    const source = liveBrandKit ? 'AirOps API (live)' : 'static (seed)';
-    console.log(`\nWin brand server running at http://localhost:${PORT}`);
-    console.log(`Brand kit source: ${source}`);
-    console.log(`Analyze endpoint: POST http://localhost:${PORT}/api/analyze\n`);
+    console.log(`\nWin brand server → http://localhost:${PORT}`);
+    console.log(`POST http://localhost:${PORT}/api/analyze\n`);
   });
 }
 
-start();
+module.exports = app;
