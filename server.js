@@ -9,10 +9,14 @@
  *   { verdict, summary, win_quote, issues, passes }
  *
  * Environment variables:
- *   ANTHROPIC_API_KEY  — required
- *   PORT               — optional, default 3001
- *   AIROPS_API_KEY     — optional; if set, brand kit is fetched fresh from AirOps
- *   AIROPS_BRAND_KIT_ID — optional, default 26564
+ *   ANTHROPIC_API_KEY   — required
+ *   PORT                — optional, default 3001
+ *   AIROPS_MCP_TOKEN    — optional; if set, Claude fetches live brand kit from AirOps
+ *                         via the Anthropic MCP connector (https://app.airops.com/mcp).
+ *                         Get it by running: npx @modelcontextprotocol/inspector
+ *                         then connecting to https://app.airops.com/mcp and completing OAuth.
+ *   AIROPS_BRAND_KIT_ID — optional, default 26564 (AirOps 2026)
+ *   AIROPS_API_KEY      — optional; fallback REST API fetch of brand kit on startup
  */
 
 'use strict';
@@ -210,7 +214,29 @@ Win quote: 1-2 sentences in Win's warm, direct, slightly dry voice. Reference th
 // ── State ─────────────────────────────────────────────────────────────────────
 
 let systemPrompt = buildSystemPrompt(STATIC_BRAND_KIT);
-let systemPromptCached = false; // track whether to send cache_control
+
+// ── MCP system prompt (used when AIROPS_MCP_TOKEN is set) ─────────────────────
+// Claude fetches the live brand kit via get_brand_kit before analyzing.
+
+const BRAND_KIT_ID = process.env.AIROPS_BRAND_KIT_ID || '26564';
+
+const MCP_SYSTEM_PROMPT = `You are Win, the AirOps Brand Guardian owl.
+
+Before analyzing any content, call get_brand_kit with id=${BRAND_KIT_ID} and includes=["writing_rules"] to load the current AirOps brand guidelines. Use the returned writing_persona, writing_tone, and writing_rules as your authoritative source.
+
+Also apply these visual design rules when checking CSS, code, or images:
+${VISUAL_DESIGN_SYSTEM}
+
+After loading the brand kit, analyze the submitted content and return ONLY a valid JSON object with this exact structure — no markdown, no preamble:
+{
+  "verdict": "on_brand" | "needs_work" | "off_brand",
+  "summary": "one sentence summary",
+  "win_quote": "1-2 sentences in Win's warm, direct voice referencing the actual content",
+  "issues": [{ "name": "", "severity": "fail"|"warn", "category": "", "excerpt": "", "fix": "" }],
+  "passes": [{ "name": "", "msg": "", "category": "" }]
+}
+
+Verdict scoring: on_brand = no violations; needs_work = 1-2 minor issues; off_brand = 3+ issues or critical failure.`;
 
 // ── Result schema ─────────────────────────────────────────────────────────────
 
@@ -291,34 +317,48 @@ app.post('/api/analyze', async (req, res) => {
   }
 
   try {
-    // Use prompt caching on the system prompt — cache after first request
-    const systemBlock = [
-      {
-        type: 'text',
-        text: systemPrompt,
-        cache_control: { type: 'ephemeral' },
-      },
-    ];
+    let text;
 
-    const stream = client.messages.stream({
-      model: 'claude-opus-4-6',
-      max_tokens: 2048,
-      system: systemBlock,
-      messages: [{ role: 'user', content: userContent }],
-      output_config: {
-        format: {
-          type: 'json_schema',
-          json_schema: {
-            name: 'brand_analysis',
-            strict: true,
-            schema: RESULT_SCHEMA,
+    if (process.env.AIROPS_MCP_TOKEN) {
+      // ── Live mode: Claude fetches brand kit via AirOps MCP ──────────────────
+      const response = await client.beta.messages.create({
+        model: 'claude-opus-4-6',
+        max_tokens: 4096,
+        system: MCP_SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: userContent }],
+        mcp_servers: [{
+          type: 'url',
+          url: 'https://app.airops.com/mcp',
+          name: 'airops',
+          authorization_token: process.env.AIROPS_MCP_TOKEN,
+        }],
+        tools: [{
+          type: 'mcp_toolset',
+          mcp_server_name: 'airops',
+          default_config: { enabled: false },
+          configs: { get_brand_kit: { enabled: true } },
+        }],
+        betas: ['mcp-client-2025-11-20'],
+      });
+      text = response.content.find(b => b.type === 'text')?.text;
+
+    } else {
+      // ── Static mode: embedded brand kit + structured output + prompt cache ───
+      const stream = client.messages.stream({
+        model: 'claude-opus-4-6',
+        max_tokens: 2048,
+        system: [{ type: 'text', text: systemPrompt, cache_control: { type: 'ephemeral' } }],
+        messages: [{ role: 'user', content: userContent }],
+        output_config: {
+          format: {
+            type: 'json_schema',
+            json_schema: { name: 'brand_analysis', strict: true, schema: RESULT_SCHEMA },
           },
         },
-      },
-    });
-
-    const response = await stream.finalMessage();
-    const text = response.content.find(b => b.type === 'text')?.text;
+      });
+      const response = await stream.finalMessage();
+      text = response.content.find(b => b.type === 'text')?.text;
+    }
 
     if (!text) throw new Error('No text in response');
 
@@ -343,7 +383,11 @@ app.post('/api/analyze', async (req, res) => {
 });
 
 // Health check
-app.get('/health', (req, res) => res.json({ status: 'ok', model: 'claude-opus-4-6' }));
+app.get('/health', (req, res) => res.json({
+  status: 'ok',
+  model: 'claude-opus-4-6',
+  brand_kit_mode: process.env.AIROPS_MCP_TOKEN ? 'live (AirOps MCP)' : 'static (seed)',
+}));
 
 // ── Init brand kit ────────────────────────────────────────────────────────────
 // Runs at module load so Vercel serverless warm starts pick it up.
